@@ -29,15 +29,5 @@ class CookielessServiceProvider extends PackageServiceProvider
         Blade::directive('sessionToken', static function () {
             return '<?php echo session_field(); ?>';
         });
-
-        app(UrlGenerator::class)->defaults([
-            Config::get('cookieless-session.parameter.name') => 'anc',
-        ]);
-        $this->app->rebinding('url', function ($url, $app) {
-            $url->defaults([Config::get('cookieless-session.parameter.name') => 'anc']);
-        });
-        $this->app->rebinding('request', function ($app) {
-            $app['url']->defaults([Config::get('cookieless-session.parameter.name') => 'anc']);
-        });
     }
 }
