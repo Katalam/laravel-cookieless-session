@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Katalam\Cookieless;
 
-use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Support\Facades\Blade;
-use Illuminate\Support\Facades\Config;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
