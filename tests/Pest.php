@@ -3,13 +3,13 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Testing\TestResponse;
 use Katalam\Cookieless\Tests\Fixtures\User;
 use Katalam\Cookieless\Tests\TestCase;
-use Illuminate\Support\Facades\Crypt;
 
 use function Pest\Laravel\get;
 use function Pest\Laravel\post;
