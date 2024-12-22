@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Katalam\Cookieless;
 
-use Katalam\Cookieless\Commands\CookielessCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -19,9 +18,6 @@ class CookielessServiceProvider extends PackageServiceProvider
          */
         $package
             ->name('laravel-cookieless-session')
-            ->hasConfigFile()
-            ->hasViews()
-            ->hasMigration('create_laravel_cookieless_session_table')
-            ->hasCommand(CookielessCommand::class);
+            ->hasConfigFile();
     }
 }
