@@ -83,7 +83,7 @@ describe('post requests', function () {
         ]);
 
         post(route('store.csrf', $parameters), [], $header)
-            ->assertRedirectToRoute('index');
+            ->assertRedirectContains(route('index'));
 
         $countedSessions = DB::table('sessions')->count();
 
@@ -165,7 +165,7 @@ describe('authenticate requests', function () {
         ];
 
         post(route('login', $parameters))
-            ->assertRedirectToRoute('profile')
+            ->assertRedirect('profile')
             ->assertCookie('laravel_session');
 
         $countedSessions = DB::table('sessions')->count();

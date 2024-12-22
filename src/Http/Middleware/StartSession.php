@@ -62,6 +62,8 @@ class StartSession extends \Illuminate\Session\Middleware\StartSession
 
         if (! ($hasSessionInHeader || $hasSessionInParameter)) {
             $this->addCookieToResponse($response, $session);
+        } elseif (Config::get('cookieless-session.parameter.include_with_response')) {
+            $this->addGetParameterToResponse($response, $session);
         }
 
         if (Config::get('cookieless-session.header.include_with_response')) {
@@ -79,5 +81,21 @@ class StartSession extends \Illuminate\Session\Middleware\StartSession
     protected function addHeaderToResponse(Response $response, Session $session): void
     {
         $response->headers->set(Config::get('cookieless-session.header.name'), Crypt::encrypt($session->getId()));
+    }
+
+    protected function addGetParameterToResponse(Response $response, Session $session): void
+    {
+        if ($response->isRedirection()) {
+            $targetUrl = $response->getTargetUrl();
+
+            $parsedUrl = parse_url($targetUrl);
+            $query = $parsedUrl['query'] ?? [];
+            $query[Config::get('cookieless-session.parameter.name')] = Crypt::encrypt($session->getId());
+
+            $parsedUrl['query'] = http_build_query($query);
+            $newUrl = $parsedUrl['scheme'].'://'.$parsedUrl['host'].($parsedUrl['path'] ?? '').'?'.$parsedUrl['query'];
+
+            $response->setTargetUrl($newUrl);
+        }
     }
 }

@@ -10,5 +10,6 @@ return [
     ],
     'parameter' => [
         'name' => '_session_token',
+        'include_with_response' => true,
     ],
 ];
