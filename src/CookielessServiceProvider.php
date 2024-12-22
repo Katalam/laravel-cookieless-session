@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Katalam\Cookieless;
 
+use Illuminate\Support\Facades\Blade;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -19,5 +20,12 @@ class CookielessServiceProvider extends PackageServiceProvider
         $package
             ->name('laravel-cookieless-session')
             ->hasConfigFile();
+    }
+
+    public function bootingPackage(): void
+    {
+        Blade::directive('sessionToken', static function () {
+            return '<?php echo session_field(); ?>';
+        });
     }
 }
