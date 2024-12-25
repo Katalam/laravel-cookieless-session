@@ -90,6 +90,13 @@ class StartSession extends \Illuminate\Session\Middleware\StartSession
 
             $parsedUrl = parse_url($targetUrl);
             $query = $parsedUrl['query'] ?? [];
+
+            // If the query is empty,
+            // but the question mark is present,
+            // we get an empty string
+            if ($query === '') {
+                $query = [];
+            }
             $query[Config::get('cookieless-session.parameter.name')] = Crypt::encrypt($session->getId());
 
             $parsedUrl['query'] = http_build_query($query);

@@ -82,7 +82,7 @@ class TestCase extends Orchestra
             $success = Auth::attempt($request->only('email', 'password'), $request->boolean('remember'));
 
             if ($success) {
-                return redirect()->route('profile');
+                return redirect()->to(route('profile').'?');
             }
 
             return redirect()->route('login');

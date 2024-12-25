@@ -156,6 +156,26 @@ describe('authenticate requests', function () {
         expect($session->user_id)->toBe($user->id);
     })->with('options');
 
+    test('logging in without session', function () {
+        $user = generateUser();
+
+        $parameters = [
+            'email' => $user->email,
+            'password' => 'password',
+            Config::get('cookieless-session.parameter.name') => 'invalid',
+        ];
+
+        postLoginAssertLoggedIn([], $parameters);
+
+        $countedSessions = DB::table('sessions')->count();
+
+        expect($countedSessions)->toBe(1);
+
+        $session = DB::table('sessions')->first();
+
+        expect($session->user_id)->toBe($user->id);
+    });
+
     test('logging in requests with cookie returns cookie', function () {
         $user = generateUser();
 
@@ -165,7 +185,7 @@ describe('authenticate requests', function () {
         ];
 
         post(route('login', $parameters))
-            ->assertRedirect('profile')
+            ->assertRedirect('profile?')
             ->assertCookie('laravel_session');
 
         $countedSessions = DB::table('sessions')->count();
