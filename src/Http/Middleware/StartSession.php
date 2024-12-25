@@ -7,6 +7,7 @@ namespace Katalam\Cookieless\Http\Middleware;
 use Closure;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Contracts\Session\Session;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Session\Store;
 use Illuminate\Support\Facades\Config;
@@ -86,17 +87,25 @@ class StartSession extends \Illuminate\Session\Middleware\StartSession
     protected function addGetParameterToResponse(Response $response, Session $session): void
     {
         if ($response->isRedirection()) {
+            /** @var RedirectResponse $response */
             $targetUrl = $response->getTargetUrl();
 
             $parsedUrl = parse_url($targetUrl);
-            $query = $parsedUrl['query'] ?? [];
+            $query = $parsedUrl['query'] ?? '';
 
-            // If the query is empty,
-            // but the question mark is present,
-            // we get an empty string
-            if ($query === '') {
-                $query = [];
-            }
+            $query = str($query)
+                ->explode('&')
+                ->mapWithKeys(function (string $item) {
+                    if (empty($item)) {
+                        return [];
+                    }
+
+                    [$key, $value] = explode('=', $item, 2);
+
+                    return [$key => $value];
+                })
+                ->toArray();
+
             $query[Config::get('cookieless-session.parameter.name')] = Crypt::encrypt($session->getId());
 
             $parsedUrl['query'] = http_build_query($query);
