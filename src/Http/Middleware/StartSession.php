@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Session\Store;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Crypt;
+use Katalam\Cookieless\Facades\UrlService;
 use Symfony\Component\HttpFoundation\Response;
 
 class StartSession extends \Illuminate\Session\Middleware\StartSession
@@ -88,28 +89,7 @@ class StartSession extends \Illuminate\Session\Middleware\StartSession
     {
         if ($response->isRedirection()) {
             /** @var RedirectResponse $response */
-            $targetUrl = $response->getTargetUrl();
-
-            $parsedUrl = parse_url($targetUrl);
-            $query = $parsedUrl['query'] ?? '';
-
-            $query = str($query)
-                ->explode('&')
-                ->mapWithKeys(function (string $item) {
-                    if (empty($item)) {
-                        return [];
-                    }
-
-                    [$key, $value] = explode('=', $item, 2);
-
-                    return [$key => $value];
-                })
-                ->toArray();
-
-            $query[Config::get('cookieless-session.parameter.name')] = Crypt::encrypt($session->getId());
-
-            $parsedUrl['query'] = http_build_query($query);
-            $newUrl = $parsedUrl['scheme'].'://'.$parsedUrl['host'].($parsedUrl['path'] ?? '').'?'.$parsedUrl['query'];
+            $newUrl = UrlService::addSessionToUrl($response->getTargetUrl());
 
             $response->setTargetUrl($newUrl);
         }
