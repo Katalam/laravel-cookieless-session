@@ -61,7 +61,7 @@ class StartSession extends \Illuminate\Session\Middleware\StartSession
         $hasSessionInHeader = $request->headers->has(Config::get('cookieless-session.header.name'));
         $hasSessionInParameter = $request->has(Config::get('cookieless-session.parameter.name'));
 
-        if (! ($hasSessionInHeader || $hasSessionInParameter)) {
+        if ((! ($hasSessionInHeader || $hasSessionInParameter)) && ! Config::get('cookieless-session.cookie.force_no_cookie')) {
             $this->addCookieToResponse($response, $session);
         } elseif (Config::get('cookieless-session.parameter.include_with_response')) {
             $this->addGetParameterToResponse($response, $session);

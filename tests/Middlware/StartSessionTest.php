@@ -196,4 +196,27 @@ describe('authenticate requests', function () {
 
         expect($session->user_id)->toBe($user->id);
     });
+
+    test('logging in requests with cookie returns no cookie if forced', function () {
+        $user = generateUser();
+
+        Config::set('cookieless-session.cookie.force_no_cookie', true);
+
+        $parameters = [
+            'email' => $user->email,
+            'password' => 'password',
+        ];
+
+        post(route('login', $parameters))
+            ->assertRedirect()
+            ->assertCookieMissing('laravel_session');
+
+        $countedSessions = DB::table('sessions')->count();
+
+        expect($countedSessions)->toBe(1);
+
+        $session = DB::table('sessions')->first();
+
+        expect($session->user_id)->toBe($user->id);
+    });
 });

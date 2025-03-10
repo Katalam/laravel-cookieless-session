@@ -12,4 +12,7 @@ return [
         'name' => '_session_token',
         'include_with_response' => true,
     ],
+    'cookie' => [
+        'force_no_cookie' => false,
+    ],
 ];
