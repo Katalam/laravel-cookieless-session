@@ -16,7 +16,7 @@ composer require katalam/laravel-cookieless-session
 You can publish the config file with:
 
 ```bash
-php artisan vendor:publish --tag="laravel-cookieless-session-config"
+php artisan vendor:publish --tag="cookieless-session-config"
 ```
 
 This is the contents of the published config file:
