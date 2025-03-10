@@ -18,10 +18,10 @@ uses(TestCase::class)->in(__DIR__);
 
 function getIndexAssertOkAndSeeHelloWorld(array $headers = [], array $parameters = []): void
 {
-    get(route('index', $parameters), $headers)
-        ->assertOk()
-        ->assertSee('Hello World')
-        ->assertHeader(Config::get('cookieless-session.header.name'));
+get(route('index', $parameters), $headers)
+->assertOk()
+->assertSee('Hello World')
+->assertHeader(Config::get('cookieless-session.header.name'));
 }
 
 function postIndexAssertRedirectToIndex(array $headers = [], array $parameters = [], string $sessionId = ''): void
@@ -38,10 +38,10 @@ function postIndexAssertRedirectToIndex(array $headers = [], array $parameters =
 
 function getIndexAssertLoggedIn(array $headers = [], array $parameters = []): void
 {
-    get(route('profile', $parameters), $headers)
-        ->assertOk()
-        ->assertSee('You are logged in!')
-        ->assertDontSee('You are not logged in!');
+get(route('profile', $parameters), $headers)
+->assertOk()
+->assertSee('You are logged in!')
+->assertDontSee('You are not logged in!');
 }
 
 function postLoginAssertLoggedIn(array $headers = [], array $parameters = [], string $sessionId = ''): void
