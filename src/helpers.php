@@ -23,12 +23,12 @@ if (! function_exists('session_token')) {
     {
         $session = app('session');
 
-        /* @phpstan-ignore-next-line  */
+        /* @phpstan-ignore-next-line */
         if (isset($session)) {
             return $session->getId();
         }
 
-        /* @phpstan-ignore-next-line  */
+        /* @phpstan-ignore-next-line */
         throw new RuntimeException('Application session store not set.');
     }
 }
