@@ -27,7 +27,7 @@ class UrlService
             })
             ->toArray();
 
-        $query[Config::get('cookieless-session.parameter.name')] = Crypt::encrypt(session()?->getId());
+        $query[Config::get('cookieless-session.parameter.name')] = Crypt::encrypt(session()->getId());
 
         $parsedUrl['query'] = http_build_query($query);
 
